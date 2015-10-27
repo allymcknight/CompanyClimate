@@ -3,6 +3,7 @@ import unirest
 import requests
 import json
 import pprint
+from bs4 import BeautifulSoup as BS 
 
 printer = pprint.PrettyPrinter()
 range1 = range(8)
@@ -12,7 +13,7 @@ input1 = raw_input("Please search:")
 for i in range1:
   payload = {'q': input1, 'v': '1.0', "rsz":8, 'start' : i}
   response = requests.get("https://ajax.googleapis.com/ajax/services/search/news", params=payload).json()
-  # printer.pprint(response)
+  printer.pprint(response)
 
 
   total_content = []
@@ -42,3 +43,7 @@ for i in range1:
     elif result.body['probability']['pos'] > .6 or result.body['label'] =='pos':
         print total_content[e]
         print "Pretty positive"
+
+allytest = requests.get('http://www.sfgate.com/technology/article/Hackbright-Academy-puts-women-coders-in-their-own-4843412.php', verify=True)
+soup = BS(allytest)
+print (soup.find('p').text)
