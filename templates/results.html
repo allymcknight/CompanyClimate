@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Company Climate</h1>
+
+{% for value in positive_values%}
+    <a href ={{ pos_results[value][1]}}>{{ pos_results[value][2] }}</a>
+    {{ pos_results[value][0] }}<br>
+
+{% endfor %}
+<br>
+<br>
+<br>
+
+{% for value in negative_values %}
+    <a href ={{ neg_results[value][1]}}>{{ neg_results[value][2] }}</a>
+    {{ neg_results[value][0] }}<br>
+{% endfor %}
+
+
+
+{% endblock %}

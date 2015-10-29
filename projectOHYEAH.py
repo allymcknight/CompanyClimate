@@ -4,46 +4,53 @@ import requests
 import json
 import pprint
 from bs4 import BeautifulSoup as BS 
+import lxml
 
 printer = pprint.PrettyPrinter()
-range1 = range(8)
+def get_results(search):
 
-input1 = raw_input("Please search:")
+  neg_results = {}
+  pos_results = {}
 
-for i in range1:
-  payload = {'q': input1, 'v': '1.0', "rsz":8, 'start' : i}
-  response = requests.get("https://ajax.googleapis.com/ajax/services/search/news", params=payload).json()
-  printer.pprint(response)
+  for i in range(8):
+    payload = {'q': search, 'v': '1.0', "rsz":8, 'start' : i}
+    response = requests.get("https://ajax.googleapis.com/ajax/services/search/news", params=payload).json()
+    printer.pprint(response)
 
 
-  total_content = []
-  for e in range(len(response["responseData"]["results"])):
-      total_content.append(response["responseData"]["results"][e]["content"])
+    total_content = []
+    for e in range(len(response["responseData"]["results"])):
+        url_content = requests.get(response["responseData"]["results"][e]["unescapedUrl"])
+        soup = BS(url_content.text, 'lxml')
+        article_body = (soup.body.find_all('p'))
+        total_content.append(article_body)
 
-  for e in range(len(total_content)):
+    for e in range(len(total_content)):
 
-    result = unirest.post("https://japerk-text-processing.p.mashape.com/sentiment/",
-    headers={
-      "X-Mashape-Key": "Ww5fx7iRxAmshWkYsxLrFKxvGQPfp1FBnDJjsnKZ4hfLm4yZQz",
-      "Content-Type": "application/x-www-form-urlencoded",
-      "Accept": "application/json"
-    },
-    params={
-      "language": "english",
-      "text": total_content[e]
-    
-    }
-  )
-    # print total_content[i]
+      result = unirest.post("https://japerk-text-processing.p.mashape.com/sentiment/",
+      headers={
+        "X-Mashape-Key": "Ww5fx7iRxAmshWkYsxLrFKxvGQPfp1FBnDJjsnKZ4hfLm4yZQz",
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Accept": "application/json"
+      },
+      params={
+        "language": "english",
+        "text": total_content[e]
+      
+      }
+    )
 
-    # print result.body
-    if result.body['probability']['neg'] > .6 or result.body['label'] =='neg':
-        print total_content[e]
-        print "Pretty negative"
-    elif result.body['probability']['pos'] > .6 or result.body['label'] =='pos':
-        print total_content[e]
-        print "Pretty positive"
+      
+      if result.body['probability']['neg'] > .6 or result.body['label'] =='neg':
+          neg_results[result.body['probability']['neg']-result.body['probability']['pos']]=[response["responseData"]["results"][e]["content"], response["responseData"]["results"][e]["unescapedUrl"], response["responseData"]["results"][e]["title"]]
 
-allytest = requests.get('http://www.sfgate.com/technology/article/Hackbright-Academy-puts-women-coders-in-their-own-4843412.php', verify=True)
-soup = BS(allytest)
-print (soup.find('p').text)
+      elif result.body['probability']['pos'] > .6 or result.body['label'] =='pos':
+          pos_results[result.body['probability']['pos']-result.body['probability']['neg']]=[response["responseData"]["results"][e]["content"], response["responseData"]["results"][e]["unescapedUrl"], response["responseData"]["results"][e]["title"]]
+
+  positive_values = pos_results.keys()
+  negative_values = neg_results.keys()
+
+  return neg_results, pos_results, positive_values, negative_values
+
+
+
