@@ -5,8 +5,16 @@ import json
 import pprint
 from bs4 import BeautifulSoup as BS 
 import lxml
+from flask import Markup
 
-printer = pprint.PrettyPrinter()
+# printer = pprint.PrettyPrinter()
+
+def removeTag(soup, tagname):
+    for tag in soup.findAll(tagname):
+        contents = tag.contents
+        parent = tag.parent
+        tag.extract()
+
 def get_results(search):
 
   neg_results = {}
@@ -15,7 +23,7 @@ def get_results(search):
   for i in range(8):
     payload = {'q': search, 'v': '1.0', "rsz":8, 'start' : i}
     response = requests.get("https://ajax.googleapis.com/ajax/services/search/news", params=payload).json()
-    printer.pprint(response)
+    # printer.pprint(response)
 
 
     total_content = []
@@ -42,10 +50,22 @@ def get_results(search):
 
       
       if result.body['probability']['neg'] > .6 or result.body['label'] =='neg':
-          neg_results[result.body['probability']['neg']-result.body['probability']['pos']]=[response["responseData"]["results"][e]["content"], response["responseData"]["results"][e]["unescapedUrl"], response["responseData"]["results"][e]["title"]]
+
+        sentiment_score = result.body['probability']['neg']-result.body['probability']['pos']
+        content = Markup(response["responseData"]["results"][e]["content"])
+        url =  Markup(response["responseData"]["results"][e]["unescapedUrl"])
+        title = Markup(response["responseData"]["results"][e]["title"])
+        article = [content, url, title]
+        neg_results[sentiment_score] = article
 
       elif result.body['probability']['pos'] > .6 or result.body['label'] =='pos':
-          pos_results[result.body['probability']['pos']-result.body['probability']['neg']]=[response["responseData"]["results"][e]["content"], response["responseData"]["results"][e]["unescapedUrl"], response["responseData"]["results"][e]["title"]]
+        
+        sentiment_score = result.body['probability']['neg']-result.body['probability']['pos']
+        content = Markup(response["responseData"]["results"][e]["content"])
+        url =  Markup(response["responseData"]["results"][e]["unescapedUrl"])
+        title = Markup(response["responseData"]["results"][e]["title"])
+        article = [content, url, title]
+        pos_results[sentiment_score] = article
 
   positive_values = pos_results.keys()
   negative_values = neg_results.keys()

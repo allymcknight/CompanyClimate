@@ -13,20 +13,21 @@ app.jinja_env.undefined = StrictUndefined
 
 @app.route('/')
 def index():
-    """Homepage."""
+    """Renders homepage."""
 
     return render_template("home.html")
 
 
 @app.route('/results')
 def search_results():
+    """Renders page with results of search and sentiment analysis."""
 
     search = request.args.get("search")
 
     neg_results, pos_results, positive_values, negative_values = projectOHYEAH.get_results(search)
 
-    return render_template("results.html", neg_results=neg_results, 
-                           pos_results=pos_results, positive_values=positive_values, 
+    return render_template("results.html", neg_results=neg_results,
+                           pos_results=pos_results, positive_values=positive_values,
                            negative_values=negative_values)
 
 

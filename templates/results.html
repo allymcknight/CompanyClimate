@@ -2,21 +2,24 @@
 {% block content %}
 
 <h1>Company Climate</h1>
-
+<div id="positive list">
 {% for value in positive_values%}
-    <a href ={{ pos_results[value][1]}}>{{ pos_results[value][2] }}</a>
+    <a href="{{ pos_results[value][1]}}">{{ pos_results[value][2] }}</a>
     {{ pos_results[value][0] }}<br>
 
 {% endfor %}
-<br>
-<br>
-<br>
+</div>
 
+<br>
+<br>
+<br>
+<div id = "negative list">
 {% for value in negative_values %}
-    <a href ={{ neg_results[value][1]}}>{{ neg_results[value][2] }}</a>
+    <a href="{{ neg_results[value][1]}}">{{ neg_results[value][2] }}</a>
     {{ neg_results[value][0] }}<br>
 {% endfor %}
 
+</div>
 
 
 {% endblock %}
