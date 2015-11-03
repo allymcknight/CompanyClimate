@@ -19,6 +19,9 @@ def get_results(search):
 
   neg_results = {}
   pos_results = {}
+  num_positive = 0
+  num_negative = 0
+  num_neutral = 0
 
   for i in range(8):
     payload = {'q': search, 'v': '1.0', "rsz":8, 'start' : i}
@@ -57,6 +60,7 @@ def get_results(search):
         title = Markup(response["responseData"]["results"][e]["title"])
         article = [content, url, title]
         neg_results[sentiment_score] = article
+        num_negative += 1
 
       elif result.body['probability']['pos'] > .6 or result.body['label'] =='pos':
         
@@ -66,11 +70,16 @@ def get_results(search):
         title = Markup(response["responseData"]["results"][e]["title"])
         article = [content, url, title]
         pos_results[sentiment_score] = article
+        num_positive += 1
 
-  positive_values = pos_results.keys()
-  negative_values = neg_results.keys()
+      else:
+        num_neutral += 1
 
-  return neg_results, pos_results, positive_values, negative_values
+  positive_value = pos_results.keys()
+  positive_values = positive_value
+  negative_value = neg_results.keys()
+  negative_values = negative_value
+  return neg_results, pos_results, positive_values, negative_values, num_positive, num_negative, num_neutral
 
 
 
