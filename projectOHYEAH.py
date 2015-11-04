@@ -6,14 +6,12 @@ import pprint
 from bs4 import BeautifulSoup as BS 
 import lxml
 from flask import Markup
+from yahoo_finance import Share
 
 # printer = pprint.PrettyPrinter()
 
-def removeTag(soup, tagname):
-    for tag in soup.findAll(tagname):
-        contents = tag.contents
-        parent = tag.parent
-        tag.extract()
+yahoo = Share('GOOG')
+print yahoo.get_open()
 
 def get_results(search):
 
@@ -22,6 +20,8 @@ def get_results(search):
   num_positive = 0
   num_negative = 0
   num_neutral = 0
+
+
 
   for i in range(8):
     payload = {'q': search, 'v': '1.0', "rsz":8, 'start' : i}
@@ -59,7 +59,8 @@ def get_results(search):
         url =  Markup(response["responseData"]["results"][e]["unescapedUrl"])
         title = Markup(response["responseData"]["results"][e]["title"])
         article = [content, url, title]
-        neg_results[sentiment_score] = article
+        print title
+        neg_results[title] = article
         num_negative += 1
 
       elif result.body['probability']['pos'] > .6 or result.body['label'] =='pos':
@@ -69,7 +70,8 @@ def get_results(search):
         url =  Markup(response["responseData"]["results"][e]["unescapedUrl"])
         title = Markup(response["responseData"]["results"][e]["title"])
         article = [content, url, title]
-        pos_results[sentiment_score] = article
+        print title
+        pos_results[title] = article
         num_positive += 1
 
       else:
