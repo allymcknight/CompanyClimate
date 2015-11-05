@@ -12,8 +12,11 @@ class NASDAQ(db.Model):
 
     __tablename__ = "nasdaq"
 
+    company_id = db.Column(db.Integer, autoincrement=True, primary_key=True)   
     ticker_code = db.Column(db.String(10), nullable=False)
     company_name = db.Column(db.String(50), nullable=False)
+    bus_sector = db.Column(db.String(60), nullable=True)
+    bus_type = db.Column(db.String(60), nullable=True)
 
     
     # how to return a redable object

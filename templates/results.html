@@ -31,12 +31,30 @@ var options = { responsive: true };
 
 var ctx_donut = $("#donutChart").get(0).getContext("2d");
 
-$.get("/sentiment-ratio.json", function (data) {
-    console.log("Here!")
-    var myDonutChart = new Chart(ctx_donut).Doughnut(data.sentiments,
-                                                     options);
-    $('#donutLegend').html(myDonutChart.generateLegend());
-});
+var sentiment_data = [
+            {
+                value: {{  a  }},
+                color: "#46BFBD",
+                highlight: "#46BFBD",
+                label: "Positive"
+            },
+            {
+                value: {{  b  }},
+                color: "#F7464A",
+                highlight: "#F7464A",
+                label: "Negative"
+            },
+            {
+                value: {{  c  }},
+                color: "#C0C0C0",
+                highlight: "#C0C0C0",
+                label: "Neutral"
+            }
+        ];
+
+var myDonutChart = new Chart(ctx_donut).Doughnut(sentiment_data, options);
+
+$('#donutLegend').html(myDonutChart.generateLegend());
 
 </script>
 
