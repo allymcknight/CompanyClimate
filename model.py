@@ -7,10 +7,10 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-class NASDAQ(db.Model):
-    """User of ratings website."""
+class NASDAQNYSE(db.Model):
+    """Company information database"""
 
-    __tablename__ = "nasdaq"
+    __tablename__ = "nasdaqnyse"
 
     company_id = db.Column(db.Integer, autoincrement=True, primary_key=True)   
     ticker_code = db.Column(db.String(10), nullable=False)
@@ -30,7 +30,7 @@ def connect_to_db(app):
     """Connect the database to our Flask app."""
 
     # Configure to use our SQLite database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ratings.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///nasdaqnyse.db'
     db.app = app
     db.init_app(app)
 
@@ -42,3 +42,5 @@ if __name__ == "__main__":
     from server import app
     connect_to_db(app)
     print "Connected to DB."
+
+

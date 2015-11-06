@@ -3,6 +3,8 @@ from flask import Flask, render_template, redirect, request, flash, session, jso
 from flask_debugtoolbar import DebugToolbarExtension
 import projectOHYEAH
 import json
+from model import NASDAQNYSE, connect_to_db, db
+from yahoo_finance import Share
 
 
 app = Flask(__name__)
@@ -24,50 +26,29 @@ def search_results():
     """Renders page with results of search and sentiment analysis."""
 
     search = request.args.get("search")
-    session["search"] = search
-    print session["search"]
 
+    company = NASDAQNYSE.query.filter(NASDAQNYSE.company_name == search).first()
+    ticker = company.ticker_code
+    company_name = company.company_name
+    industry = company.bus_sector
+    sector = company.bus_type
+
+    stock = Share(ticker)
+    stock_closing_price = stock.get_open()
+    
     neg_results, pos_results, positive_values, negative_values, a, b, c = projectOHYEAH.get_results(search)
 
     return render_template("results.html", neg_results=neg_results,
                            pos_results=pos_results, positive_values=positive_values,
-                           negative_values=negative_values, a=a, b=b, c=c)
-
-# @app.route('/sentiment-ratio.json')
-# def melon_types_data():
-#     """Return data about sentiment ratio."""
-#     print session["search"]
-#     neg_results, pos_results, positive_values, negative_values, a, b, c = projectOHYEAH.get_results(session["search"])
-#     print a, b, c
-
-#     data_list_of_dicts = {
-#         'sentiments': [
-#             {
-#                 "value": a,
-#                 "color": "#46BFBD",
-#                 "highlight": "#46BFBD",
-#                 "label": "Positive"
-#             },
-#             {
-#                 "value": b,
-#                 "color": "#F7464A",
-#                 "highlight": "#F7464A",
-#                 "label": "Negative"
-#             },
-#             {
-#                 "value": c,
-#                 "color": "#C0C0C0",
-#                 "highlight": "#C0C0C0",
-#                 "label": "Neutral"
-#             },
-#         ]
-#     }
-#     return jsonify(data_list_of_dicts)
+                           negative_values=negative_values, a=a, b=b, c=c, 
+                           ticker=ticker, stock_closing_price=stock_closing_price,
+                           company_name=company_name, industry=industry, sector=sector)
 
 
 if __name__ == "__main__":
     app.debug = True
 
+    connect_to_db(app)
     DebugToolbarExtension(app)
 
     app.run()
