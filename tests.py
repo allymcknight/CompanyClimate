@@ -31,6 +31,10 @@ class FlaskTests(TestCase):
         test_search = "Home Depot"
         self.assertEqual(type(run_googlenews_api(test_search)) == type({}), True)
 
+    def test_article_scraper(self):
+        """Tests the output of the web scraper."""
+        
+
     def test_homepage(self):
         """Tests the result of my homepage"""
         result = self.client.get('/')

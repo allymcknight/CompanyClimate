@@ -1,5 +1,5 @@
 from jinja2 import StrictUndefined
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 from flask_debugtoolbar import DebugToolbarExtension
 from projectOHYEAH import run_googlenews_api, article_scraper, analyze_sentiment, sort_results
 from model import NASDAQNYSE, connect_to_db
@@ -25,9 +25,12 @@ def search_results():
 
     search = request.args.get("search")
 
+
     company = NASDAQNYSE.query.filter(NASDAQNYSE.company_name == search).first()
-   
+
     ticker = company.ticker_code
+    session['symbol'] = ticker
+
     company_name = company.company_name
     industry = company.bus_sector
     sector = company.bus_type
@@ -47,6 +50,15 @@ def search_results():
                            ticker=ticker, stock_closing_price=stock_closing_price,
                            company_name=company_name, industry=industry, sector=sector)
 
+@app.route('/currentstockprice')
+def get_current_price():
+    """Returns most current stock price"""
+
+    finance_object = Share(session['symbol'])
+
+    current_price = finance_object.get_price()
+
+    return current_price
 
 if __name__ == "__main__":
     app.debug = True

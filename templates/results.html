@@ -5,7 +5,7 @@
         <div class="col-md-6 col-md-offset-3">
             <h1>Company Climate for {{ company_name }} ({{ ticker }})</h1><br>
             <h3>{{ industry }} : {{sector}}</h3><br>
-            <h3>Last closing stock price: {{ stock_closing_price }}</h3><br><br>
+            <h3>Current Stock Price: <span id='currentprice'></span> </h3><br><br>
         </div>
     </div>
 </div>
@@ -63,6 +63,19 @@ var sentiment_data = [
 var myDonutChart = new Chart(ctx_donut).Doughnut(sentiment_data, options);
 
 $('#donutLegend').html(myDonutChart.generateLegend());
+
+function replacePrice(results) {
+    var price = results;
+    $('#currentprice').html(price);
+    console.log("here!")
+}
+
+function getStockprice () {
+    $.get('/currentstockprice', replacePrice);
+}
+
+getStockprice();
+setInterval(getStockprice, 3000);
 
 </script>
 
