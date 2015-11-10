@@ -25,12 +25,19 @@ class NASDAQNYSE(db.Model):
 
         return "<NASDAQ ticker_code=%s company_name=%s>" % (self.ticker_code, self.company_name)
 
+def example_data():
+    """Create some sample data."""
 
-def connect_to_db(app):
-    """Connect the database to our Flask app."""
+    NASDAQNYSE.query.delete()
 
-    # Configure to use our SQLite database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///nasdaqnyse.db'
+    apple = NASDAQNYSE(company_id='1', ticker_code='AAPL', company_name="Apple", bus_sector='Computer', bus_type='Devices')
+    home_depot = NASDAQNYSE(company_id='2', ticker_code='HD', company_name="Home Depot", bus_sector='Goods', bus_type='store')
+
+    db.session.add_all([apple, home_depot])
+    db.session.commit()
+
+def connect_to_db(app, db_uri="sqlite:///nasdaqnyse.db"):
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     db.app = app
     db.init_app(app)
 
