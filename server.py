@@ -4,12 +4,45 @@ from flask_debugtoolbar import DebugToolbarExtension
 from projectOHYEAH import run_googlenews_api, article_scraper, analyze_sentiment, sort_results
 from model import NASDAQNYSE, connect_to_db
 from yahoo_finance import Share
+from datetime import timedelta, datetime
+from collections import OrderedDict
 
 app = Flask(__name__)
 
 app.secret_key = "ABCsgerhysdvc8c9u4wf"
 
 app.jinja_env.undefined = StrictUndefined
+
+def get_date_range():
+    """Using Datetime, grabs the current date and the date of 10 days ago."""
+
+    today = datetime.now()
+    ten = timedelta(days=10)
+    last_ten = today - ten
+    today_year= str(today.year)
+    today_month = str(today.month)
+    today_day = str(today.day)
+    today_date = today_year + "-" + today_month + "-" + today_day
+
+    last_10_year = str(last_ten.year)
+    last_10_month = str(last_ten.month)
+    last_10_day = str(last_ten.day)
+    last_10_date = last_10_year + "-" + last_10_month + "-" + last_10_day
+
+    return today_date, last_10_date
+
+def get_historical_prices():
+
+    today, last_10_date = get_date_range()
+    finance_object = Share(session['symbol'])
+    history = finance_object.get_historical(last_10_date, today)
+
+    stock_history = OrderedDict()
+    for i in range(len(history)):
+        stock_history[history[i]['Adj_Close']] = history[i]['Date']
+
+
+    return stock_history
 
 
 @app.route('/')
@@ -22,33 +55,38 @@ def index():
 @app.route('/results')
 def search_results():
     """Renders page with results of search and sentiment analysis."""
-
+    # Grabs the search item with a get request.
     search = request.args.get("search")
 
-
+    # Querys my database for the search company's object.
     company = NASDAQNYSE.query.filter(NASDAQNYSE.company_name == search).first()
-
+    # Stores the ticker code in the session.
     ticker = company.ticker_code
     session['symbol'] = ticker
-
+    # Grabs even more information about the company from the database.
     company_name = company.company_name
     industry = company.bus_sector
     sector = company.bus_type
 
-    stock = Share(ticker)
-    stock_closing_price = stock.get_open()
-
+    # Runs the search value through the functions (google API, web scraper, sentiment analysis API)
     news = run_googlenews_api(search)
     news_with_article_body = article_scraper(news)
     news_w_sent = analyze_sentiment(news_with_article_body)
 
+    # Unpacks the results from the function that sorts the results of the functions above for passing.
     neg_results, pos_results, positive_values, negative_values, a, b, c = sort_results(news_w_sent)
+
+    # Grabs today's date and the date of 10 days ago. 
+    today_date, last_10_date = get_date_range()
+
+    stock_history = get_historical_prices()
+
 
     return render_template("results.html", neg_results=neg_results,
                            pos_results=pos_results, positive_values=positive_values,
                            negative_values=negative_values, a=a, b=b, c=c,
-                           ticker=ticker, stock_closing_price=stock_closing_price,
-                           company_name=company_name, industry=industry, sector=sector)
+                           ticker=ticker, company_name=company_name, industry=industry, 
+                           sector=sector, stock_history=stock_history)
 
 @app.route('/currentstockprice')
 def get_current_price():
