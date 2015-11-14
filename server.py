@@ -17,7 +17,7 @@ def get_date_range():
     """Using Datetime, grabs the current date and the date of 10 days ago."""
 
     today = datetime.now()
-    ten = timedelta(days=10)
+    ten = timedelta(days=365)
     last_ten = today - ten
     today_year= str(today.year)
     today_month = str(today.month)
@@ -39,7 +39,7 @@ def get_historical_prices():
 
     stock_history = OrderedDict()
     for i in range(len(history)):
-        stock_history[history[i]['Adj_Close']] = history[i]['Date']
+        stock_history[history[i]['Adj_Close']] = i
 
 
     return stock_history
@@ -87,6 +87,62 @@ def search_results():
                            negative_values=negative_values, a=a, b=b, c=c,
                            ticker=ticker, company_name=company_name, industry=industry, 
                            sector=sector, stock_history=stock_history)
+
+@app.route('/compareform')
+def gather_comparing_comps():
+    """Renders form for gathering 2 companies to compare."""
+
+    return render_template("compareform.html")
+
+@app.route('/comparisonresults')
+def get_comparison_results():
+    """Shows results of company comparison"""
+
+    firstsearch = request.args.get("firstcompany")
+    secondsearch = request.args.get("secondcompany")
+
+    firstcompany = NASDAQNYSE.query.filter(NASDAQNYSE.company_name == firstsearch).first()
+    secondcompany = NASDAQNYSE.query.filter(NASDAQNYSE.company_name == secondsearch).first()
+
+    tickerone = firstcompany.ticker_code
+    tickertwo = secondcompany.ticker_code
+
+    session['symbolone'] = tickerone
+    session['symboltwo'] = tickertwo
+
+    first_company_name = firstcompany.company_name
+    first_industry = firstcompany.bus_sector
+    first_sector = firstcompany.bus_type
+
+    second_company_name = secondcompany.company_name
+    second_industry = secondcompany.bus_sector
+    second_sector = secondcompany.bus_type
+
+    first_news = run_googlenews_api(firstsearch)
+    first_news_with_article_body = article_scraper(first_news)
+    first_news_w_sent = analyze_sentiment(first_news_with_article_body)
+
+    first_neg_results, first_pos_results, first_positive_values, first_negative_values, a1, b1, c1 = sort_results(first_news_w_sent)
+
+    second_news = run_googlenews_api(secondsearch)
+    second_news_with_article_body = article_scraper(second_news)
+    second_news_w_sent = analyze_sentiment(second_news_with_article_body)
+
+    second_neg_results, second_pos_results, second_positive_values, second_negative_values, a2, b2, c2 = sort_results(second_news_w_sent)
+
+    return render_template("comparisonresults.html", first_neg_results=first_neg_results,
+                           first_pos_results=first_pos_results, first_positive_values=first_positive_values,
+                           first_negative_values=first_negative_values, 
+                           a1=a1, b1=b1, c1=c1,
+                           tickerone=tickerone, first_company_name=first_company_name, first_industry=first_industry,
+                           first_sector=first_sector, 
+                           second_neg_results=second_neg_results,
+                           second_pos_results=second_pos_results, second_positive_values=second_positive_values,
+                           second_negative_values=second_negative_values, 
+                           a2=a2, b2=b2, c2=c2,
+                           tickertwo=tickertwo, second_company_name=second_company_name, second_industry=second_industry,
+                           second_sector=second_sector)
+
 
 @app.route('/currentstockprice')
 def get_current_price():

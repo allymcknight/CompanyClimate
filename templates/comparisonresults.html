@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <h1>Company Climate for {{ first_company_name }} ({{ tickerone }})</h1><br>
+            <h3>{{ first_industry }} : {{first_sector}}</h3><br>
+            <h3>Current Stock Price: <span id='currentprice1'></span> </h3><br><br>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class = "row">
+        <div id="positive list" class="col-md-4">
+            {% for value in first_positive_values%}
+            <a href="{{ first_pos_results[value][1] }}">{{ first_pos_results[value][2] }}</a>
+            {{ first_pos_results[value][0] }}<br>
+            {% endfor %}
+        </div>
+
+        <div class="col-md-4">
+            <canvas id="donutChart1"></canvas>
+        <div id="donutLegend1" class="chart-legend"></div>
+        </div>
+
+        <div id = "first_negative list" class="col-md-4">
+            {% for value in first_negative_values %}
+            <a href="{{ first_neg_results[value][1]}}">{{ first_neg_results[value][2] }}</a>
+            {{ first_neg_results[value][0] }}<br>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+// Below creates a donut graph using charts.js
+
+var options = { responsive: true };
+
+var ctx_donut = $("#donutChart1").get(0).getContext("2d");
+
+var sentiment_data = [
+            {
+                value: {{  a1  }},
+                color: "#46BFBD",
+                highlight: "#46BFBD",
+                label: "Positive"
+            },
+            {
+                value: {{  b1  }},
+                color: "#F7464A",
+                highlight: "#F7464A",
+                label: "Negative"
+            },
+            {
+                value: {{  c1  }},
+                color: "#C0C0C0",
+                highlight: "#C0C0C0",
+                label: "Neutral"
+            }
+        ];
+
+var myDonutChart = new Chart(ctx_donut).Doughnut(sentiment_data, options);
+
+$('#donutLegend1').html(myDonutChart.generateLegend());
+</script>
+{% endblock %}
