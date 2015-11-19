@@ -12,7 +12,7 @@
 
 <div class="container-fluid">
     <div class = "row">
-        <div id="positive list" class="col-md-4">
+        <div id="positivelist" class="col-md-4">
             {% for value in first_positive_values%}
             <a href="{{ first_pos_results[value][1] }}">{{ first_pos_results[value][2] }}</a>
             {{ first_pos_results[value][0] }}<br>
@@ -24,7 +24,7 @@
         <div id="donutLegend1" class="chart-legend"></div>
         </div>
 
-        <div id = "first_negative list" class="col-md-4">
+        <div id = "negativelist" class="col-md-4">
             {% for value in first_negative_values %}
             <a href="{{ first_neg_results[value][1]}}">{{ first_neg_results[value][2] }}</a>
             {{ first_neg_results[value][0] }}<br>
@@ -66,5 +66,73 @@ var sentiment_data = [
 var myDonutChart = new Chart(ctx_donut).Doughnut(sentiment_data, options);
 
 $('#donutLegend1').html(myDonutChart.generateLegend());
+</script>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <h1>Company Climate for {{ second_company_name }} ({{ tickertwo }})</h1><br>
+            <h3>{{ second_industry }} : {{second_sector}}</h3><br>
+            <h3>Current Stock Price: <span id='currentprice2'></span> </h3><br><br>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class = "row">
+        <div id="positivelist" class="col-md-4">
+            {% for value in second_positive_values%}
+            <a href="{{ second_pos_results[value][1] }}">{{ second_pos_results[value][2] }}</a>
+            {{ second_pos_results[value][0] }}<br>
+            {% endfor %}
+        </div>
+
+        <div class="col-md-4">
+            <canvas id="donutChart2"></canvas>
+        <div id="donutLegend2" class="chart-legend"></div>
+        </div>
+
+        <div id = "negativelist" class="col-md-4">
+            {% for value in second_negative_values %}
+            <a href="{{ second_neg_results[value][1]}}">{{ second_neg_results[value][2] }}</a>
+            {{ second_neg_results[value][0] }}<br>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+// Below creates a donut graph using charts.js
+
+var options = { responsive: true };
+
+var ctx_donut = $("#donutChart2").get(0).getContext("2d");
+
+var sentiment_data = [
+            {
+                value: {{  a2  }},
+                color: "#46BFBD",
+                highlight: "#46BFBD",
+                label: "Positive"
+            },
+            {
+                value: {{  b2  }},
+                color: "#F7464A",
+                highlight: "#F7464A",
+                label: "Negative"
+            },
+            {
+                value: {{  c2  }},
+                color: "#C0C0C0",
+                highlight: "#C0C0C0",
+                label: "Neutral"
+            }
+        ];
+
+var myDonutChart = new Chart(ctx_donut).Doughnut(sentiment_data, options);
+
+$('#donutLegend2').html(myDonutChart.generateLegend());
 </script>
 {% endblock %}

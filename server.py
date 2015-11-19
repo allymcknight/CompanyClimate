@@ -17,7 +17,7 @@ def get_date_range():
     """Using Datetime, grabs the current date and the date of 10 days ago."""
 
     today = datetime.now()
-    ten = timedelta(days=365)
+    ten = timedelta(days=200)
     last_ten = today - ten
     today_year= str(today.year)
     today_month = str(today.month)

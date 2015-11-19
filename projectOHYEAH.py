@@ -1,6 +1,7 @@
 import simplejson
 import unirest
 import requests
+import grequests
 import json
 import pprint
 from bs4 import BeautifulSoup as BS 
@@ -30,7 +31,6 @@ def run_googlenews_api(search):
 
 def article_scraper(news_results):
   """Scrapes the article body from the article URL."""
-
   for url in news_results.keys():
     url_content = requests.get(url)
     soup = BS(url_content.text, 'lxml')
@@ -41,24 +41,53 @@ def article_scraper(news_results):
 
 def analyze_sentiment(article_info):
 
+  rr = []
   for url in article_info.keys():
-    result = unirest.post("https://japerk-text-processing.p.mashape.com/sentiment/",
-                           headers={
-                           "X-Mashape-Key": "Ww5fx7iRxAmshWkYsxLrFKxvGQPfp1FBnDJjsnKZ4hfLm4yZQz",
-                           "Content-Type": "application/x-www-form-urlencoded",
-                           "Accept": "application/json"
-                           },
-                           params={
-                           "language": "english",
-                           "text": article_info[url][3]
+    rr.append(grequests.post("https://japerk-text-processing.p.mashape.com/sentiment/", 
+                       headers={'X-Mashape-Key':'Ww5fx7iRxAmshWkYsxLrFKxvGQPfp1FBnDJjsnKZ4hfLm4yZQz',
+                       'Content-Type':'application/x-www-form-urlencoded','Accept':'application/json'},
+                       data={'language':'english','text':str(article_info[url][3])}))
+
       
-                           }
-                         )
-    article_info[url].append(result.body['probability']['neg'])
-    article_info[url].append(result.body['probability']['pos'])
-    article_info[url].append(result.body['label'])
+  response_object = grequests.map(rr)
+
+  for i in range(len(article_info.keys())):
+    print i
+    print type(i)
+
+    article_info[article_info.keys()[i]].append(response_object[i].json()['probability']['neg'])
+    article_info[article_info.keys()[i]].append(response_object[i].json()['probability']['pos'])
+    article_info[article_info.keys()[i]].append(response_object[i].json()['label'])
 
   return article_info
+
+
+#   for url in article_info.keys():
+# result = unirest.post("https://japerk-text-processing.p.mashape.com/sentiment/",
+#                        headers={
+#                        "X-Mashape-Key": "Ww5fx7iRxAmshWkYsxLrFKxvGQPfp1FBnDJjsnKZ4hfLm4yZQz",
+#                        "Content-Type": "application/x-www-form-urlencoded",
+#                        "Accept": "application/json"
+#                        },
+#                        params={
+#                        "language": "english",
+#                        "text": "i love pineapple",
+#   # "text": article_info[url][3]
+#                        }
+#                      )
+#     article_info[url].append(result.body['probability']['neg'])
+#     article_info[url].append(result.body['probability']['pos'])
+#     article_info[url].append(result.body['label'])
+
+  return article_info
+
+def test_func(n):
+
+  news = run_googlenews_api(n)
+  results = article_scraper(news)
+  sentiment = analyze_sentiment(results)
+
+  return sentiment
 
 def sort_results(news_w_sent):
 

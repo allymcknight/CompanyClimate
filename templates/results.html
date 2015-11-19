@@ -12,7 +12,7 @@
 
 <div class="container-fluid">
     <div class = "row">
-        <div id="positive list" class="col-md-4">
+        <div id="positivelist" class="col-md-4">
             {% for value in positive_values%}
             <a href="{{ pos_results[value][1] }}">{{ pos_results[value][2] }}</a>
             {{ pos_results[value][0] }}<br>
@@ -24,7 +24,7 @@
         <div id="donutLegend" class="chart-legend"></div>
         </div>
 
-        <div id = "negative list" class="col-md-4">
+        <div id = "negativelist" class="col-md-4">
             {% for value in negative_values %}
             <a href="{{ neg_results[value][1]}}">{{ neg_results[value][2] }}</a>
             {{ neg_results[value][0] }}<br>

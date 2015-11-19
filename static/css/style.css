@@ -1,0 +1,21 @@
+body {
+    background: url(http://c2984702.r2.cf0.rackcdn.com/2011/06/storm-sky.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    height:100%;
+}
+h1 {
+    color: white;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+form {
+    color: white;
+}
+a {
+    color: white;
+
