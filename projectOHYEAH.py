@@ -41,20 +41,17 @@ def article_scraper(news_results):
 
 def analyze_sentiment(article_info):
 
-  rr = []
+  request_urls = []
   for url in article_info.keys():
-    rr.append(grequests.post("https://japerk-text-processing.p.mashape.com/sentiment/", 
+    request_urls.append(grequests.post("https://japerk-text-processing.p.mashape.com/sentiment/", 
                        headers={'X-Mashape-Key':'Ww5fx7iRxAmshWkYsxLrFKxvGQPfp1FBnDJjsnKZ4hfLm4yZQz',
                        'Content-Type':'application/x-www-form-urlencoded','Accept':'application/json'},
                        data={'language':'english','text':str(article_info[url][3])}))
 
       
-  response_object = grequests.map(rr)
+  response_object = grequests.map(request_urls)
 
   for i in range(len(article_info.keys())):
-    print i
-    print type(i)
-
     article_info[article_info.keys()[i]].append(response_object[i].json()['probability']['neg'])
     article_info[article_info.keys()[i]].append(response_object[i].json()['probability']['pos'])
     article_info[article_info.keys()[i]].append(response_object[i].json()['label'])
@@ -62,28 +59,9 @@ def analyze_sentiment(article_info):
   return article_info
 
 
-#   for url in article_info.keys():
-# result = unirest.post("https://japerk-text-processing.p.mashape.com/sentiment/",
-#                        headers={
-#                        "X-Mashape-Key": "Ww5fx7iRxAmshWkYsxLrFKxvGQPfp1FBnDJjsnKZ4hfLm4yZQz",
-#                        "Content-Type": "application/x-www-form-urlencoded",
-#                        "Accept": "application/json"
-#                        },
-#                        params={
-#                        "language": "english",
-#                        "text": "i love pineapple",
-#   # "text": article_info[url][3]
-#                        }
-#                      )
-#     article_info[url].append(result.body['probability']['neg'])
-#     article_info[url].append(result.body['probability']['pos'])
-#     article_info[url].append(result.body['label'])
+def process_funcs(search):
 
-  return article_info
-
-def test_func(n):
-
-  news = run_googlenews_api(n)
+  news = run_googlenews_api(search)
   results = article_scraper(news)
   sentiment = analyze_sentiment(results)
 

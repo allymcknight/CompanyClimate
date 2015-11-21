@@ -34,7 +34,7 @@
     </div>
 </div>
 
-<svg id="visualisation" width="1000" height="500"></svg>
+<svg id="visualisation" width="1300" height="650"></svg>
 
 <script>
 // Below creates a donut graph using charts.js
@@ -89,14 +89,14 @@ InitChart();
 function InitChart() {
 
   var lineData = [ {% for x in stock_history %}{
-    'x': {{stock_history[x]}},
-    'y': {{x}}
+    'x': {{x}},
+    'y': {{stock_history[x]}}
   },
 {% endfor %}
     ];
   var vis = d3.select("#visualisation"),
-    WIDTH = 1000,
-    HEIGHT = 500,
+    WIDTH = 1300,
+    HEIGHT = 650,
     MARGINS = {
       top: 20,
       right: 20,
@@ -132,12 +132,12 @@ function InitChart() {
 
 
   vis.append("svg:g")
-    .attr("class", "x axis")
+    .attr("class", "xaxis")
     .attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
     .call(xAxis);
 
   vis.append("svg:g")
-    .attr("class", "y axis")
+    .attr("class", "yaxis")
     .attr("transform", "translate(" + (MARGINS.left) + ",0)")
     .call(yAxis);
 
@@ -152,11 +152,30 @@ function InitChart() {
 
 vis.append("svg:path")
   .attr("d", lineFunc(lineData))
-  .attr("stroke", "blue")
-  .attr("stroke-width", 2)
-  .attr("fill", "none");
+  .attr("stroke", "white")
+  .attr("stroke-width", 4)
+  .attr("fill", "black");
 
 }
+var w = window,
+    d = document,
+    e = d.documentElement,
+    g = d.getElementsByTagName('visualisation')[0],
+    x = w.innerWidth || e.clientWidth || g.clientWidth,
+    y = w.innerHeight|| e.clientHeight|| g.clientHeight;
+
+// var svg = d3.select("body").append("svg")
+//         .attr("width", x)
+//         .attr("height", y)
+//         .append("g");
+
+function updateWindow(){
+    x = w.innerWidth || e.clientWidth || g.clientWidth;
+    y = w.innerHeight|| e.clientHeight|| g.clientHeight;
+    
+    svg.attr("width", x).attr("height", y);
+}
+window.onresize = updateWindow;
 
 </script>
 

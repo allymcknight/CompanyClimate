@@ -49,6 +49,20 @@ class FlaskTests(TestCase):
         self.assertEqual(result.status_code, 200)
         self.assertIn('<title>Company Climate</title>', result.data)
 
+    def test_compareformpage(self):
+        """Tests the result of my compare form page"""
+        result = self.client.get('/compareform')
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('<title>Company Climate</title>', result.data)    
+
+    def test_compareresults_page(self):
+        """Tests the result of my comparison results page."""
+        result = self.client.get('/comparisonresults?firstcompany=Facebook&secondcompany=Home+Depot')
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('<title>Company Climate</title>', result.data)    
+
     def test_find_company(self):
         """Can we find an company in the sample data?"""
 
