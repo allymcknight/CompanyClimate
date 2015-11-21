@@ -52,6 +52,16 @@ def index():
 
     return render_template("home.html")
 
+def get_company_info(search):
+    """Gets the company information from database"""
+    company = NASDAQNYSE.query.filter(NASDAQNYSE.company_name == search).first()
+    company_name = company.company_name
+    industry = company.bus_sector
+    sector = company.bus_type
+    ticker = company.ticker_code
+    return company_name, industry, sector, ticker
+
+
 
 @app.route('/results')
 def search_results():
@@ -59,16 +69,15 @@ def search_results():
     # Grabs the search item with a get request.
     search = request.args.get("search")
 
-    # Querys my database for the search company's object.
     try:
+        # Querys my database for the search company's object.
         company = NASDAQNYSE.query.filter(NASDAQNYSE.company_name == search).first()
-        # Stores the ticker code in the session.
         ticker = company.ticker_code
-        session['symbol'] = ticker
         # Grabs even more information about the company from the database.
-        company_name = company.company_name
-        industry = company.bus_sector
-        sector = company.bus_type
+        company_name, industry, sector, ticker = get_company_info(search)
+
+        # Stores the ticker code in the session.
+        session['symbol'] = ticker
 
         # Runs the search value through the functions (google API, web scraper, sentiment analysis API)
         news_w_sent = process_funcs(search)
@@ -106,19 +115,11 @@ def get_comparison_results():
         firstcompany = NASDAQNYSE.query.filter(NASDAQNYSE.company_name == firstsearch).first()
         secondcompany = NASDAQNYSE.query.filter(NASDAQNYSE.company_name == secondsearch).first()
 
-        tickerone = firstcompany.ticker_code
-        tickertwo = secondcompany.ticker_code
-
+        first_company_name, first_industry, first_sector, tickerone = get_company_info(firstsearch)
         session['symbolone'] = tickerone
+
+        second_company_name, second_industry, second_sector, tickertwo = get_company_info(secondsearch)
         session['symboltwo'] = tickertwo
-
-        first_company_name = firstcompany.company_name
-        first_industry = firstcompany.bus_sector
-        first_sector = firstcompany.bus_type
-
-        second_company_name = secondcompany.company_name
-        second_industry = secondcompany.bus_sector
-        second_sector = secondcompany.bus_type
 
         first_news_w_sent = process_funcs(firstsearch)
 
