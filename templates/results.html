@@ -3,12 +3,20 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
-            <h1>Company Climate for {{ company_name }} ({{ ticker }})</h1><br>
-            <h3>{{ industry }} : {{sector}}</h3><br>
-            <h3>Current Stock Price: <span id='currentprice'></span> </h3><br><br>
+            <span class="header">Company Climate for {{ company_name }}</span>
         </div>
     </div>
-</div>
+    <div class="row">
+      <div class="col-lg-6">
+            <h3>{{ industry }} : {{sector}}</h3>
+      </div>
+          <div class="col-lg-6">
+            <span class="stocktext">Current Stock Price:</span>
+             <span class='currentprice'></span><br>
+             <span class="stocktext">Ticker Code:</span><span class='currentprice'>{{ ticker }}</span>
+        </div>
+      </div>
+    </div>
 
 <div class="container-fluid">
     <div class = "row">
@@ -46,14 +54,14 @@ var ctx_donut = $("#donutChart").get(0).getContext("2d");
 var sentiment_data = [
             {
                 value: {{  a  }},
-                color: "#46BFBD",
-                highlight: "#46BFBD",
+                color: "#0084A6",
+                highlight: "#0084A6",
                 label: "Positive"
             },
             {
                 value: {{  b  }},
-                color: "#F7464A",
-                highlight: "#F7464A",
+                color: "#ED4D09",
+                highlight: "#ED4D09",
                 label: "Negative"
             },
             {
@@ -152,30 +160,30 @@ function InitChart() {
 
 vis.append("svg:path")
   .attr("d", lineFunc(lineData))
-  .attr("stroke", "white")
+  .attr("stroke", "#ED4D09")
   .attr("stroke-width", 4)
-  .attr("fill", "black");
+  .attr("fill", "#0084A6");
 
 }
-var w = window,
-    d = document,
-    e = d.documentElement,
-    g = d.getElementsByTagName('visualisation')[0],
-    x = w.innerWidth || e.clientWidth || g.clientWidth,
-    y = w.innerHeight|| e.clientHeight|| g.clientHeight;
+// var w = window,
+//     d = document,
+//     e = d.documentElement,
+//     g = d.getElementsByTagName('visualisation')[0],
+//     x = w.innerWidth || e.clientWidth || g.clientWidth,
+//     y = w.innerHeight|| e.clientHeight|| g.clientHeight;
 
 // var svg = d3.select("body").append("svg")
 //         .attr("width", x)
 //         .attr("height", y)
 //         .append("g");
 
-function updateWindow(){
-    x = w.innerWidth || e.clientWidth || g.clientWidth;
-    y = w.innerHeight|| e.clientHeight|| g.clientHeight;
+// function updateWindow(){
+//     x = w.innerWidth || e.clientWidth || g.clientWidth;
+//     y = w.innerHeight|| e.clientHeight|| g.clientHeight;
     
-    svg.attr("width", x).attr("height", y);
-}
-window.onresize = updateWindow;
+//     svg.attr("width", x).attr("height", y);
+// }
+// window.onresize = updateWindow;
 
 </script>
 

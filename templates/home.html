@@ -1,15 +1,37 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Company Climate</h1>
-
+<!-- <h1>Company Climate</h1>
 <form action="/results" method="GET">
     SEARCH:
-    <input type="text" placeholder="Please type search here:" name="search" required>
-    <input type="submit" value="Get my results!"> 
+<div id="the-basics">
+  <input class="typeahead" type="text" placeholder="Company Name" name="search" REQUIRED>
+  <input type="submit" value="Get my results!">
+</div>
 </form>
+<a href="/compareform">Compare companies</a> -->
+<br>
+<br>
+<br>
+<br>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6 col-lg-offset-3">
+            <h1>Company Climate</h1>
+            <form action="/results" method="GET">
+                <span id="searchtext">SEARCH:</span>
+            <div id="the-basics">
+              <input class="typeahead" type="text" placeholder="Company Name" name="search" REQUIRED>
+              <input id="button" type="submit" value="Get my results!">
+            </div>
+            </form>
+            <a href="/compareform">Compare companies</a>
+        </div>
+    </div>
+</div>
 
-<a href="/compareform">Compare companies</a>
 
-
+<script>
+src="/static/js/homesearch.js"
+</script>
 {% endblock %}
