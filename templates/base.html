@@ -19,14 +19,8 @@
 
 </head>
 
-<body>
   
-    <ul>
-        {% for message in get_flashed_messages() %}
-        <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
   {% block content %} put your content here {% endblock %}
 
-</body>
+
 </html>

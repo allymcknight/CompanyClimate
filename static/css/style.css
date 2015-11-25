@@ -1,8 +1,8 @@
-body {
+.homepage {
  margin: 0;
  /*padding-top: 1000px;*/
- background-image: url(http://splitshire.com/wp-content/uploads/2014/02/SplitShire_blur16.jpg);
- background-size: 1400px 3000px;
+ background-image: url(../sunrise.jpg);
+ background-size: 1400px 800px;
  background-repeat:no-repeat;
  /*display: compact;*/
 }
@@ -25,26 +25,20 @@ h1 {
 .header {
     color: black;
     font-family: 'Voltaire', sans-serif;
-    font-size: 50px;
+    font-size: 35px;
 }
 
 .header1 {
     color: black;
     font-family: 'Voltaire', sans-serif;
-    font-size: 65px;
+    font-size: 50px;
 }    
-/*form {
-    color: black;
-    font-family: 'Voltaire', sans-serif;
-}*/
 
 .typeahead {
     background-color: white;
+    color: white;
     font-family: 'Voltaire', sans-serif;
 
-.tt-menu tt-open {
-    background-color: white;
-}
 }
 input[type="text"] {
   width: 350px;
@@ -65,7 +59,7 @@ a {
 }
 h3 {
     font-family: 'Voltaire', sans-serif;
-    font-size: 50px;
+    font-size: 35px;
 }
 
 .stocktext {
@@ -75,16 +69,18 @@ h3 {
 
 
 #currentprice{
-    font-size: 100px;
+    font-size: 80px;
     background: transparent;
-    color: #25823A;
-    opacity: .6;
+    color: white;
+    font-family: 'Voltaire', sans-serif;
+
 }
 .ticker {
-   font-size: 100px;
+    font-size: 100px;
     background: transparent;
-    color: #25823A;
-    opacity: .6; 
+    color: white;
+    font-family: 'Voltaire', sans-serif;
+
 }
 
 #button {
