@@ -5,9 +5,11 @@
 
 <form action="/comparisonresults" method="GET">
     SEARCH:
-    <input type="text" placeholder="First Company" name="firstcompany" required>
-    <input type="text" placeholder="Second Company" name="secondcompany" required>
-    <input type="submit" value="Get my comparison!"> 
+    <div id="the-basics">
+        <input class="typeahead" type="text" placeholder="Company Name" name="firstcompany" REQUIRED>
+        <input class="typeahead" type="text" placeholder="Company Name" name="secondcompany" REQUIRED>
+        <input type="submit" value="Get my comparison!"> 
+</div>
 </form>
 
 

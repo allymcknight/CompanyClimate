@@ -5,10 +5,14 @@ characteristic==14.3.0
 coverage==4.0.2
 cryptography==1.0.2
 cssselect==0.9.1
+Cython==0.23.4
 enum34==1.0.4
 Flask==0.10.1
 Flask-DebugToolbar==0.10.0
 Flask-SQLAlchemy==2.1
+gevent==1.1rc2.dev0
+greenlet==0.4.9
+grequests==0.2.0
 hashlib==20081119
 idna==2.0
 ipaddress==1.0.14

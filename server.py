@@ -6,6 +6,7 @@ from model import NASDAQNYSE, connect_to_db
 from yahoo_finance import Share
 from datetime import timedelta, datetime
 from collections import OrderedDict
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -79,6 +80,10 @@ def search_results():
         # Stores the ticker code in the session.
         session['symbol'] = ticker
 
+        # Gets the current date and time
+        d = datetime.now()
+        now = d.strftime("%c")
+
         # Runs the search value through the functions (google API, web scraper, sentiment analysis API)
         news_w_sent = process_funcs(search)
 
@@ -95,7 +100,7 @@ def search_results():
                                pos_results=pos_results, positive_values=positive_values,
                                negative_values=negative_values, a=a, b=b, c=c,
                                ticker=ticker, company_name=company_name, industry=industry, 
-                               sector=sector, stock_history=stock_history)
+                               sector=sector, stock_history=stock_history, now=now)
     except AttributeError:
         return render_template("error.html")    
 
