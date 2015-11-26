@@ -14,8 +14,11 @@ Usage is simple::
 
 Start typing the company name and choose the correct option from the drop down type ahead menu. Click the results button and wait for the response from the server.
 
-.
-![Search Page](http://i.imgur.com/v7sdi3T.png?1)
+
+.. image:: http://i.imgur.com/v7sdi3T.png?1
+   :height: 100px
+   :width: 200 px
+   :scale: 50 %
 
 
 Features
