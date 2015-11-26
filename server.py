@@ -1,7 +1,7 @@
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, request, session
 from flask_debugtoolbar import DebugToolbarExtension
-from projectOHYEAH import run_googlenews_api, article_scraper, analyze_sentiment, sort_results, process_funcs
+from sentimentfuncs import run_googlenews_api, article_scraper, analyze_sentiment, sort_results, process_funcs
 from model import NASDAQNYSE, connect_to_db
 from yahoo_finance import Share
 from datetime import timedelta, datetime
