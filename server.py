@@ -126,6 +126,9 @@ def get_comparison_results():
         second_company_name, second_industry, second_sector, tickertwo = get_company_info(secondsearch)
         session['symboltwo'] = tickertwo
 
+        d = datetime.now()
+        now = d.strftime("%c")
+
         first_news_w_sent = process_funcs(firstsearch)
 
         first_neg_results, first_pos_results, first_positive_values, first_negative_values, a1, b1, c1 = sort_results(first_news_w_sent)
@@ -145,7 +148,7 @@ def get_comparison_results():
                                second_negative_values=second_negative_values, 
                                a2=a2, b2=b2, c2=c2,
                                tickertwo=tickertwo, second_company_name=second_company_name, second_industry=second_industry,
-                               second_sector=second_sector)
+                               second_sector=second_sector, now=now)
 
     except AttributeError:
         return render_template("error.html")  
@@ -159,6 +162,27 @@ def get_current_price():
     current_price = finance_object.get_price()
 
     return current_price
+
+@app.route('/firstcurrentstockprice')
+def get_first_current_price():
+    """Returns most current stock price"""
+
+    finance_object = Share(session['symbolone'])
+
+    current_price = finance_object.get_price()
+
+    return current_price
+
+@app.route('/secondcurrentstockprice')
+def get_second_current_price():
+    """Returns most current stock price"""
+
+    finance_object = Share(session['symboltwo'])
+
+    current_price = finance_object.get_price()
+
+    return current_price
+
 
 if __name__ == "__main__":
     app.debug = True

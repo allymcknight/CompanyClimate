@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
+<body>
 <div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12" id="title">
+
     <div class="row">
         <div class="text-center">
             <span class="header1">Company Climate for {{ company_name }}</span><br>
@@ -12,7 +16,11 @@
             <span class="header">{{ industry }} : {{sector}}</span>
 
         </div>
+      </div>
     </div>
+     <div class="row">
+    <div class="col-lg-12" id="stockinfo">
+
     <div class="row">
       <div class="col-lg-6">
         <span class="stocktext">Current Stock Price:</span>
@@ -23,31 +31,41 @@
         </div>
       </div>
     </div>
+  </div>
+    </div>
+  </div>
 
 <div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12" id="results">
     <div class = "row">
         <div id="positivelist" class="col-md-4">
+          <span class="introtext">Lookin' Good</span><br>
             {% for value in positive_values%}
             <a href="{{ pos_results[value][1] }}">{{ pos_results[value][2] }}</a>
-            {{ pos_results[value][0] }}<br>
+            <span class="text">{{ pos_results[value][0] }}</span><br>
             {% endfor %}
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4"><br><br>
             <canvas id="donutChart"></canvas>
         </div>
 
         <div id = "negativelist" class="col-md-4">
+         <span class="introtext">Lookin' Rough</span><br>
             {% for value in negative_values %}
             <a href="{{ neg_results[value][1]}}">{{ neg_results[value][2] }}</a>
-            {{ neg_results[value][0] }}<br>
+            <span class="text">{{ neg_results[value][0] }}</span><br>
             {% endfor %}
 
         </div>
     </div>
+  </div>
+</div>
 </div>
 
 <svg id="visualisation" width="1300" height="650"></svg>
+</body>
 
 <script>
 // Below creates a donut graph using charts.js

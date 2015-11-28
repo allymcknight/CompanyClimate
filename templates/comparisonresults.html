@@ -1,38 +1,76 @@
 {% extends 'base.html' %}
 {% block content %}
+
+
+
+
+
+<body>
 <div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12" id="title">
+
     <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            <h1>Company Climate for {{ first_company_name }} ({{ tickerone }})</h1><br>
-            <h3>{{ first_industry }} : {{first_sector}}</h3><br>
-            <h3>Current Stock Price: <span id='currentprice1'></span> </h3><br><br>
-        </div>
+        <div class="text-center">
+            <span class="header1">Company Climate for {{ first_company_name }}</span><br>
+          </div>
     </div>
-</div>
+    <div class="row">
+          <div class="text-center">
+            <span class="header">As of {{ now }}</span><br>
+            <span class="header">{{ first_industry }} : {{first_sector}}</span>
+
+        </div>
+      </div>
+    </div>
+     <div class="row">
+    <div class="col-lg-12" id="stockinfo">
+
+    <div class="row">
+      <div class="col-lg-6">
+        <span class="stocktext">Current Stock Price:</span>
+        <span id='currentprice1'></span><br>
+      </div>
+          <div class="col-lg-6">
+             <span class="stocktext">Ticker Code:</span><span class='ticker'>{{ tickerone }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+    </div>
+  </div>
 
 <div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12" id="results">
     <div class = "row">
         <div id="positivelist" class="col-md-4">
+          <span class="introtext">Lookin' Good</span><br>
             {% for value in first_positive_values%}
             <a href="{{ first_pos_results[value][1] }}">{{ first_pos_results[value][2] }}</a>
-            {{ first_pos_results[value][0] }}<br>
+            <span class="text">{{ first_pos_results[value][0] }}</span><br>
             {% endfor %}
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4"><br><br>
             <canvas id="donutChart1"></canvas>
-        <div id="donutLegend1" class="chart-legend"></div>
         </div>
 
         <div id = "negativelist" class="col-md-4">
+         <span class="introtext">Lookin' Rough</span><br>
             {% for value in first_negative_values %}
             <a href="{{ first_neg_results[value][1]}}">{{ first_neg_results[value][2] }}</a>
-            {{ first_neg_results[value][0] }}<br>
+            <span class="text">{{ first_neg_results[value][0] }}</span><br>
             {% endfor %}
 
         </div>
     </div>
+  </div>
 </div>
+</div>
+
+
+
 
 
 <script>
@@ -65,42 +103,95 @@ var sentiment_data = [
 
 var myDonutChart = new Chart(ctx_donut).Doughnut(sentiment_data, options);
 
-$('#donutLegend1').html(myDonutChart.generateLegend());
+function replacePrice1(results) {
+    var price = results;
+    $('#currentprice1').html(price);
+}
+
+function getStockprice1 () {
+    $.get('/firstcurrentstockprice', replacePrice1);
+}
+
+getStockprice1();
+setInterval(getStockprice1, 3000);
+
+
 </script>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            <h1>Company Climate for {{ second_company_name }} ({{ tickertwo }})</h1><br>
-            <h3>{{ second_industry }} : {{second_sector}}</h3><br>
-            <h3>Current Stock Price: <span id='currentprice2'></span> </h3><br><br>
-        </div>
-    </div>
-</div>
+
+
+
+
+
 
 <div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12" id="title">
+
+    <div class="row">
+        <div class="text-center">
+            <span class="header1">Company Climate for {{ second_company_name }}</span><br>
+          </div>
+    </div>
+    <div class="row">
+          <div class="text-center">
+            <span class="header">As of {{ now }}</span><br>
+            <span class="header">{{ second_industry }} : {{second_sector}}</span>
+
+        </div>
+      </div>
+    </div>
+     <div class="row">
+    <div class="col-lg-12" id="stockinfo">
+
+    <div class="row">
+      <div class="col-lg-6">
+        <span class="stocktext">Current Stock Price:</span>
+        <span id='currentprice2'></span><br>
+      </div>
+          <div class="col-lg-6">
+             <span class="stocktext">Ticker Code:</span><span class='ticker'>{{ tickertwo }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+    </div>
+  </div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12" id="results">
     <div class = "row">
         <div id="positivelist" class="col-md-4">
+          <span class="introtext">Lookin' Good</span><br>
             {% for value in second_positive_values%}
             <a href="{{ second_pos_results[value][1] }}">{{ second_pos_results[value][2] }}</a>
-            {{ second_pos_results[value][0] }}<br>
+            <span class="text">{{ second_pos_results[value][0] }}</span><br>
             {% endfor %}
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4"><br><br>
             <canvas id="donutChart2"></canvas>
-        <div id="donutLegend2" class="chart-legend"></div>
         </div>
 
         <div id = "negativelist" class="col-md-4">
+         <span class="introtext">Lookin' Rough</span><br>
             {% for value in second_negative_values %}
             <a href="{{ second_neg_results[value][1]}}">{{ second_neg_results[value][2] }}</a>
-            {{ second_neg_results[value][0] }}<br>
+            <span class="text">{{ second_neg_results[value][0] }}</span><br>
             {% endfor %}
 
         </div>
     </div>
+  </div>
 </div>
+</div>
+</body>
+
+
+
+
+
 
 
 <script>
@@ -133,6 +224,17 @@ var sentiment_data = [
 
 var myDonutChart = new Chart(ctx_donut).Doughnut(sentiment_data, options);
 
-$('#donutLegend2').html(myDonutChart.generateLegend());
+function replacePrice2(results) {
+    var price = results;
+    $('#currentprice2').html(price);
+}
+
+function getStockprice2 () {
+    $.get('/secondcurrentstockprice', replacePrice2);
+}
+
+getStockprice2();
+setInterval(getStockprice2, 3000);
+
 </script>
 {% endblock %}

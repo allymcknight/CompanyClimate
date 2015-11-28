@@ -1,21 +1,25 @@
 .homepage {
  margin: 0;
- /*padding-top: 1000px;*/
  background-image: url(../sunrise.jpg);
  background-size: 1400px 800px;
  background-repeat:no-repeat;
- /*display: compact;*/
-}
-#positivelist {
-    border-style: inset;
-    border-color: #0084A6;
-    border-width: 10px;
 }
 
-#negativelist {
-    border-style: inset;
-    border-color: #ED4D09;
-    border-width: 10px;
+#title {
+  background-color: #192440;
+  opacity: .8;
+  z-index: 0;
+}
+
+.text {
+  color: white;
+  font-family: 'Voltaire', sans-serif;
+}
+
+#results {
+  background-color: #B1592C;
+  opacity: .8;
+  z-index: 0;
 }
 
 h1 {
@@ -23,13 +27,13 @@ h1 {
     font-family: 'Voltaire', sans-serif;
 }
 .header {
-    color: black;
+    color: white;
     font-family: 'Voltaire', sans-serif;
     font-size: 35px;
 }
 
 .header1 {
-    color: black;
+    color: white;
     font-family: 'Voltaire', sans-serif;
     font-size: 50px;
 }    
@@ -56,6 +60,7 @@ a {
     color: black;
     font-family: 'Voltaire', sans-serif;
     font-size: 16px;
+    font-weight: bold;
 }
 h3 {
     font-family: 'Voltaire', sans-serif;
@@ -65,20 +70,45 @@ h3 {
 .stocktext {
     font-family: 'Voltaire', sans-serif;
     font-size: 40px;
+    color: #192440;
+}
+
+.introtext {
+    font-family: 'Voltaire', sans-serif;
+    font-size: 40px;
+    color: white;
+}
+
+#stockinfo{
+  background-color: white;
 }
 
 
-#currentprice{
+#currentprice {
     font-size: 80px;
     background: transparent;
-    color: white;
+    color: #192440;
     font-family: 'Voltaire', sans-serif;
-
 }
-.ticker {
-    font-size: 100px;
+
+#currentprice1 {
+    font-size: 80px;
     background: transparent;
-    color: white;
+    color: #192440;
+    font-family: 'Voltaire', sans-serif;
+}
+
+#currentprice2 {
+    font-size: 80px;
+    background: transparent;
+    color: #192440;
+    font-family: 'Voltaire', sans-serif;
+}
+
+.ticker {
+    font-size: 80px;
+    background: transparent;
+    color: #192440;
     font-family: 'Voltaire', sans-serif;
 
 }
