@@ -11,6 +11,18 @@
   z-index: 0;
 }
 
+#negativelist {
+  height: 430px;
+  overflow: scroll;
+
+}
+
+#positivelist {
+  height: 430px;
+  overflow: scroll;
+
+}
+
 .text {
   color: white;
   font-family: 'Voltaire', sans-serif;
