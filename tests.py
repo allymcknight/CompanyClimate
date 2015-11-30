@@ -1,9 +1,11 @@
 import json
 from unittest import TestCase
 from model import NASDAQNYSE, connect_to_db, db, example_data
-from projectOHYEAH import sort_results, run_googlenews_api
+from flask import session
+from sentimentfuncs import sort_results, run_googlenews_api
 from server import app
 import server
+from collections import OrderedDict
 
 class SentimentTests(TestCase):
     """Unit tests about the Sentiment analysis sorting."""
@@ -61,7 +63,31 @@ class FlaskTests(TestCase):
         result = self.client.get('/comparisonresults?firstcompany=Facebook&secondcompany=Home+Depot')
 
         self.assertEqual(result.status_code, 200)
-        self.assertIn('<title>Company Climate</title>', result.data)    
+        self.assertIn('<title>Company Climate</title>', result.data)  
+
+
+    def test_get_historial_prices(self):
+        """Tests the output of the historical prices Yahoo library"""
+
+        self.assertIsInstance(server.get_historical_prices(), OrderedDict)
+
+    def test_currentstockprice_page(self):
+        """Tests the result of AJAX request current stock price page."""
+        result = self.client.get('/currentstockprice')
+
+        self.assertEqual(result.status_code, 200)  
+
+    def test_firstcurrentstockprice_page(self):
+        """Tests the result of AJAX request first company's current stock price page."""
+        result = self.client.get('/firstcurrentstockprice')
+
+        self.assertEqual(result.status_code, 200)
+
+    def test_secondcurrentstockprice_page(self):
+        """Tests the result of AJAX request second company's current stock price page."""
+        result = self.client.get('/secondcurrentstockprice')
+
+        self.assertEqual(result.status_code, 200)
 
     def test_find_company(self):
         """Can we find an company in the sample data?"""

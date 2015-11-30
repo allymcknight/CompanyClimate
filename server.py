@@ -32,12 +32,16 @@ def get_date_range():
 
     return today_date, last_10_date
 
+
 def get_historical_prices():
     """Creates an OrderedDict which contains the days from current day and the 
     closing stock price on that day."""
 
     today, last_10_date = get_date_range()
-    finance_object = Share(session['symbol'])
+    try:
+        finance_object = Share(session['symbol'])
+    except RuntimeError:
+        finance_object = Share("AAPL")
     history = finance_object.get_historical(last_10_date, today)
 
     stock_history = OrderedDict()
@@ -52,6 +56,7 @@ def index():
     """Renders homepage."""
 
     return render_template("home.html")
+
 
 def get_company_info(search):
     """Gets the company information from database"""
@@ -104,11 +109,13 @@ def search_results():
     except AttributeError:
         return render_template("error.html")    
 
+
 @app.route('/compareform')
 def gather_comparing_comps():
     """Renders form for gathering 2 companies to compare."""
 
     return render_template("compareform.html")
+
 
 @app.route('/comparisonresults')
 def get_comparison_results():
@@ -153,31 +160,40 @@ def get_comparison_results():
     except AttributeError:
         return render_template("error.html")  
 
+
 @app.route('/currentstockprice')
 def get_current_price():
     """Returns most current stock price"""
-
-    finance_object = Share(session['symbol'])
+    try:
+        finance_object = Share(session['symbol'])
+    except KeyError:
+        finance_object = Share("AWAY")
 
     current_price = finance_object.get_price()
 
     return current_price
+
 
 @app.route('/firstcurrentstockprice')
 def get_first_current_price():
     """Returns most current stock price"""
-
-    finance_object = Share(session['symbolone'])
+    try:
+        finance_object = Share(session['symbolone'])
+    except KeyError:
+        finance_object = Share("AWAY")
 
     current_price = finance_object.get_price()
 
     return current_price
 
+
 @app.route('/secondcurrentstockprice')
 def get_second_current_price():
     """Returns most current stock price"""
-
-    finance_object = Share(session['symboltwo'])
+    try:
+        finance_object = Share(session['symboltwo'])
+    except KeyError:
+        finance_object = Share("AWAY")
 
     current_price = finance_object.get_price()
 
