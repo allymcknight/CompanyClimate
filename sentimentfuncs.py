@@ -15,16 +15,18 @@ from yahoo_finance import Share
 def run_googlenews_api(search):
   """Gathers the first 64 Google News articles from a search"""
 
-  news_results = {}
+  news_results = {"http://www.facebook.com":["I'm pretty sure this is a kick butt company.", "http://www.facebook.com", "This article is about how cool the company is"], 
+                  "http://www.google.com":["This company seems cool too", "http://www.google.com", "We like to search and find things also AI"]}
 
-  for i in range(8):
-    payload = {'q': search, 'v': '1.0', "rsz":8, 'start' : i}
-    response = requests.get("https://ajax.googleapis.com/ajax/services/search/news", params=payload).json()
-    for e in range(8):
-      content = Markup(response["responseData"]["results"][e]["content"])
-      url = response["responseData"]["results"][e]["unescapedUrl"]
-      title = Markup(response["responseData"]["results"][e]["title"])
-      news_results[url] = [content, url, title]
+
+  # for i in range(8):
+  #   payload = {'q': search, 'v': '1.0', "rsz":8, 'start' : i}
+  #   response = requests.get("https://ajax.googleapis.com/ajax/services/search/news", params=payload).json()
+  #   for e in range(8):
+  #     content = Markup(response["responseData"]["results"][e]["content"])
+  #     url = response["responseData"]["results"][e]["unescapedUrl"]
+  #     title = Markup(response["responseData"]["results"][e]["title"])
+  #     news_results[url] = [content, url, title]
 
   return news_results
 
